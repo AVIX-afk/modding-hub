@@ -1,0 +1,80 @@
+---
+// Lists game servers from src/data/servers.json with their status.
+// Minecraft servers are checked live in the visitor's browser through the
+// free mcsrvstat.us API; other games use the status you set by hand.
+import type { Server } from "../lib/projects";
+interface Props { servers: Server[] }
+const { servers } = Astro.props;
+const label = { online: "Online", offline: "Offline", maintenance: "Maintenance" } as const;
+---
+<ul class="servers">
+  {servers.map((s) => {
+    const state = s.statusSource === "manual" ? (s.manualStatus ?? "offline") : "checking";
+    return (
+      <li class="server" data-source={s.statusSource} data-address={s.address}>
+        <div class="row">
+          <span class="status" aria-live="polite">
+            <span class="dot" data-state={state}></span>
+            <span class="status-text">{state === "checking" ? "Checking…" : label[state as keyof typeof label]}</span>
+          </span>
+          <span class="players muted"></span>
+        </div>
+        <h3>{s.name}</h3>
+        <p class="muted">{s.game}</p>
+        <p class="addr">
+          <code>{s.address}</code>
+          <button type="button" class="copy" data-copy={s.address}>Copy address</button>
+        </p>
+        {s.note && <p class="muted note">{s.note}</p>}
+      </li>
+    );
+  })}
+</ul>
+
+<script>
+  type Answer = { online: boolean; players?: { online: number; max: number } };
+  const cache = new Map<string, Promise<Answer | null>>();
+  function check(address: string) {
+    if (!cache.has(address)) {
+      cache.set(address,
+        fetch(`https://api.mcsrvstat.us/3/${encodeURIComponent(address)}`)
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null));
+    }
+    return cache.get(address)!;
+  }
+
+  document.querySelectorAll<HTMLElement>(".server[data-source='minecraft']").forEach(async (el) => {
+    const dot = el.querySelector<HTMLElement>(".dot")!;
+    const text = el.querySelector<HTMLElement>(".status-text")!;
+    const players = el.querySelector<HTMLElement>(".players")!;
+    const res = await check(el.dataset.address!);
+    if (!res) { dot.dataset.state = ""; text.textContent = "Status unavailable"; return; }
+    dot.dataset.state = res.online ? "online" : "offline";
+    text.textContent = res.online ? "Online" : "Offline";
+    if (res.online && res.players) players.textContent = `${res.players.online} of ${res.players.max} players`;
+  });
+
+  document.querySelectorAll<HTMLButtonElement>(".copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        btn.textContent = "Copied";
+        setTimeout(() => (btn.textContent = "Copy address"), 1800);
+      } catch { btn.textContent = "Select the address to copy"; }
+    });
+  });
+</script>
+
+<style>
+  .servers { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .server { padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; gap: 6px; }
+  .row { display: flex; justify-content: space-between; gap: 12px; font-size: var(--step--1); }
+  .status { display: inline-flex; align-items: center; gap: 8px; font-weight: 650; }
+  h3 { font-size: var(--step-1); margin-top: 4px; }
+  .addr { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  code { font: inherit; font-weight: 600; padding: 4px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line); }
+  .copy { font: inherit; font-size: var(--step--1); font-weight: 600; color: var(--muted); background: none; border: 0; padding: 6px 4px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .copy:hover { color: var(--text); }
+  .note { font-size: var(--step--1); }
+</style>

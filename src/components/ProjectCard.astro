@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { latestRelease, formatDate } from "../lib/releases";
+import { href } from "../lib/url";
+
+interface Props { project: CollectionEntry<"projects">; headingLevel?: 2 | 3; wide?: boolean }
+const { project, headingLevel = 3, wide = false } = Astro.props;
+const { data } = project;
+const release = await latestRelease(data.repo);
+const H = `h${headingLevel}`;
+const state = data.status === "Released" ? "released" : data.status === "In development" ? "development" : undefined;
+---
+<article class:list={["card", { wide }]} style={`--accent: ${data.accent}`}>
+  <a class="cover" href={href(`/projects/${project.id}/`)} tabindex="-1" aria-hidden="true">
+    <Image src={data.cover} alt="" widths={[480, 760, 1200]} sizes={wide ? "(max-width: 860px) 100vw, 700px" : "(max-width: 700px) 100vw, 380px"} />
+  </a>
+  <div class="body">
+    <div class="tags">
+      <span class="tag">{data.kind}</span>
+      <span class="tag">{data.platform}</span>
+    </div>
+    <H class="title"><a href={href(`/projects/${project.id}/`)}>{data.title}</a></H>
+    <p class="muted summary">{data.summary}</p>
+    <p class="meta">
+      <span class="status"><span class="dot" data-state={state}></span>{data.status}</span>
+      {release && <span class="ver">Version {release.version}, {formatDate(release.publishedAt)}</span>}
+    </p>
+  </div>
+</article>
+
+<style>
+  .card { position: relative; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .card:hover { border-color: color-mix(in oklab, var(--accent) 55%, var(--line)); }
+  .card:has(.title a:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .cover { display: block; aspect-ratio: 16 / 9; background: var(--bg); border-bottom: 3px solid var(--accent); }
+  .cover :global(img) { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+  .body { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px 20px; flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .title { font-size: var(--step-2); font-stretch: var(--wide); }
+  .title a { text-decoration: none; }
+  .title a::after { content: ""; position: absolute; inset: 0; }
+  .title a:focus-visible { outline: none; }
+  .summary { max-width: 60ch; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-size: var(--step--1); color: var(--muted); }
+  .wide { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+  .wide .cover { aspect-ratio: auto; border-bottom: 0; border-right: 3px solid var(--accent); }
+  .wide .body { padding: 28px 28px 24px; gap: 12px; }
+  .wide .title { font-size: var(--step-3); }
+  @media (max-width: 860px) {
+    .wide { grid-template-columns: 1fr; }
+    .wide .cover { aspect-ratio: 3 / 1; border-right: 0; border-bottom: 3px solid var(--accent); }
+  }
+  .status { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: 600; }
+</style>

@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { studio } from "../site.config";
+import { href } from "../lib/url";
+---
+<BaseLayout title="About" description={`Who ${studio.name} is, what it makes, and where its downloads come from.`}>
+  <section class="wrap head">
+    <h1 class="display">About {studio.name}</h1>
+    <p class="lead muted">
+      {studio.name} is a one-person studio run by AVIX, a developer who likes to tinker. It makes mods, games, tools and bots,
+      for whichever game an idea fits best.
+    </p>
+  </section>
+
+  <section class="wrap rows">
+    <div class="row">
+      <h2>What we make</h2>
+      <div>
+        <p>Projects start as an idea for a game we're playing and grow until they're good enough to share. Some are mods for existing games, some are standalone, and some are tools that make running a server or a community easier.</p>
+        <p>Every project gets its own page here with what it does, what it needs to run, and where to get it.</p>
+        <a class="btn" href={href("/projects/")}>See all projects</a>
+      </div>
+    </div>
+
+    <div class="row">
+      <h2>Where downloads come from</h2>
+      <div>
+        <p>Releases are published on GitHub, next to the source code and the full changelog. The download buttons on this site link there directly, so there's never a copy hosted somewhere else.</p>
+        <p>Where a project supports it, releases come with checksums and the author's signature so you can confirm the file is genuine. If you find one of our projects on another site, it didn't come from us.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <h2>Get in touch</h2>
+      <div>
+        <p>Found a bug or have an idea? Each project has an issue tracker linked from its page. That's the fastest way to reach us, and everyone can follow the fix.</p>
+        <div class="btn-row">
+          {studio.links.discord && <a class="btn" href={studio.links.discord} rel="noopener" target="_blank"><Icon name="discord" />Join the Discord</a>}
+          <a class="btn" href={studio.links.github} rel="noopener" target="_blank"><Icon name="github" />GitHub</a>
+          {studio.links.email && <a class="btn" href={`mailto:${studio.links.email}`}><Icon name="mail" />Email</a>}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .head { padding-block: clamp(48px, 8vw, 96px) 24px; }
+  h1 { font-size: var(--step-4); max-width: 16ch; }
+  .lead { font-size: var(--step-1); line-height: 1.55; max-width: 50ch; margin-top: 20px; }
+  .rows { padding-bottom: 64px; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 16px 48px; padding-block: 40px; border-top: 1px solid var(--line); }
+  .row h2 { font-size: var(--step-2); font-stretch: var(--wide); }
+  .row div > p { color: #c9cdd6; max-width: 62ch; margin-bottom: 1em; }
+  .row .btn { margin-top: 8px; }
+  @media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
+</style>

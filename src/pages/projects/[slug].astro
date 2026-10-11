@@ -1,0 +1,184 @@
+---
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import ServerList from "../../components/ServerList.astro";
+import Icon from "../../components/Icon.astro";
+import { allProjects, allServers } from "../../lib/projects";
+import { latestRelease, formatDate } from "../../lib/releases";
+import { href } from "../../lib/url";
+
+export async function getStaticPaths() {
+  const projects = await allProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+const release = await latestRelease(data.repo);
+const servers = allServers().filter((s) => s.project === project.id);
+const others = (await allProjects()).filter((p) => p.id !== project.id).slice(0, 3);
+
+const resources = [
+  data.links.guide && { icon: "book" as const, label: "Player guide", text: "Recipes, rules and numbers", url: data.links.guide },
+  data.links.changelog && { icon: "list" as const, label: "Changelog", text: "What changed in each version", url: data.links.changelog },
+  data.links.issues && { icon: "bug" as const, label: "Report a problem", text: "Bugs and ideas go to the issue tracker", url: data.links.issues },
+  data.links.discord && { icon: "discord" as const, label: "Project Discord", text: "Chat with other players", url: data.links.discord },
+].filter(Boolean) as { icon: "book" | "list" | "bug" | "discord"; label: string; text: string; url: string }[];
+---
+<BaseLayout title={data.title} description={data.summary} image={data.cover} accent={data.accent}>
+  <article>
+    <header class="wrap head">
+      <nav aria-label="Breadcrumb" class="crumbs"><a href={href("/projects/")}>Projects</a><span aria-hidden="true">/</span><span aria-current="page">{data.title}</span></nav>
+      <div class="head-grid">
+        <div>
+          <h1 class="display">{data.title}</h1>
+          <p class="summary">{data.summary}</p>
+          <div class="btn-row">
+            {data.links.download && (
+              <a class="btn btn-primary" href={data.links.download} rel="noopener" target="_blank">
+                <Icon name="download" />{release ? `Download ${release.version}` : "Download"}
+              </a>
+            )}
+            {data.links.source && (
+              <a class="btn" href={data.links.source} rel="noopener" target="_blank"><Icon name="github" />Source code</a>
+            )}
+          </div>
+        </div>
+        <dl class="facts">
+          <div><dt>Made for</dt><dd>{data.platform}</dd></div>
+          <div><dt>Type</dt><dd>{data.kind}</dd></div>
+          <div><dt>Status</dt><dd>{data.status}</dd></div>
+          {release && (
+            <div><dt>Latest version</dt><dd>{release.version}<span class="muted">, released <time datetime={release.publishedAt.toISOString()}>{formatDate(release.publishedAt)}</time></span></dd></div>
+          )}
+        </dl>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <Image class="cover" src={data.cover} alt={data.coverAlt} widths={[720, 1200, 1760]} sizes="(max-width: 1240px) 100vw, 1180px" loading="eager" />
+      {data.contentNote && <p class="note">{data.contentNote}</p>}
+    </div>
+
+    <div class="wrap layout">
+      <div class="prose"><Content /></div>
+      <aside class="side">
+        {data.requirements.length > 0 && (
+          <section aria-labelledby="req">
+            <h2 id="req">Requirements</h2>
+            <dl class="reqs">
+              {data.requirements.map((r) => (
+                <div><dt>{r.url ? <a href={r.url} rel="noopener" target="_blank">{r.name}</a> : r.name}</dt><dd class="muted">{r.version}</dd></div>
+              ))}
+            </dl>
+          </section>
+        )}
+        {resources.length > 0 && (
+          <section aria-labelledby="res">
+            <h2 id="res">Resources</h2>
+            <ul class="resources">
+              {resources.map((r) => (
+                <li><a href={r.url} rel="noopener" target="_blank"><Icon name={r.icon} /><span><strong>{r.label}</strong><small class="muted">{r.text}</small></span></a></li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </aside>
+    </div>
+
+    {servers.length > 0 && (
+      <section class="wrap block" aria-labelledby="srv">
+        <h2 id="srv" class="block-title">Servers</h2>
+        <ServerList servers={servers} />
+      </section>
+    )}
+
+    {data.gallery.length > 0 && (
+      <section class="wrap block" aria-labelledby="gal">
+        <h2 id="gal" class="block-title">In game</h2>
+        <div class="gallery">
+          {data.gallery.map((g) => (
+            <figure>
+              <Image src={g.src} alt={g.alt} widths={[600, 1000, 1500]} sizes="(max-width: 1240px) 100vw, 1180px" />
+              {g.caption && <figcaption class="muted">{g.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {data.legal && <p class="wrap legal muted">{data.legal}</p>}
+  </article>
+
+  {others.length > 0 && (
+    <section class="wrap block more" aria-labelledby="more">
+      <h2 id="more" class="block-title">More projects</h2>
+      <div class="grid">{others.map((p) => <ProjectCard project={p} />)}</div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .head { padding-block: 32px 40px; }
+  .crumbs { display: flex; gap: 10px; font-size: var(--step--1); color: var(--muted); margin-bottom: clamp(24px, 5vw, 48px); }
+  .crumbs a { color: var(--muted); text-underline-offset: 3px; }
+  .crumbs a:hover { color: var(--text); }
+  .head-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px clamp(32px, 6vw, 80px); align-items: end; }
+  h1 { font-size: var(--step-4); line-height: 1; }
+  .summary { font-size: var(--step-1); line-height: 1.55; color: var(--muted); margin-block: 20px 28px; max-width: 50ch; }
+  .facts { margin: 0; display: grid; border-top: 1px solid var(--line); }
+  .facts div { display: grid; grid-template-columns: 9.5rem 1fr; gap: 12px; padding-block: 11px; border-bottom: 1px solid var(--line); }
+  .facts dt { color: var(--muted); font-size: var(--step--1); padding-top: 2px; }
+  .facts dd { margin: 0; font-weight: 600; }
+  .facts dd .muted { font-weight: 450; }
+
+  :global(img.cover) { width: 100%; border-radius: var(--radius); image-rendering: pixelated; border-bottom: 4px solid var(--accent); }
+  .note { margin-top: 16px; padding: 14px 18px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; color: var(--muted); font-size: var(--step--1); max-width: 80ch; }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px clamp(32px, 6vw, 72px); padding-block: 56px 24px; align-items: start; }
+  .side { display: grid; gap: 32px; position: sticky; top: 88px; }
+  .side h2 { font-size: var(--step-0); font-weight: 750; margin-bottom: 10px; }
+  .reqs { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 4px 18px; }
+  .reqs div { padding-block: 12px; }
+  .reqs div + div { border-top: 1px solid var(--line); }
+  .reqs dt { font-weight: 650; }
+  .reqs dt a { text-decoration-color: color-mix(in oklab, var(--accent) 60%, transparent); text-underline-offset: 3px; }
+  .reqs dd { margin: 2px 0 0; font-size: var(--step--1); }
+  .resources { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .resources a { display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; }
+  .resources a:hover { border-color: color-mix(in oklab, var(--accent) 55%, var(--line)); background: var(--surface); }
+  .resources :global(svg) { width: 22px; height: 22px; color: var(--accent); flex: none; }
+  .resources span { display: grid; line-height: 1.35; }
+  .resources small { font-size: var(--step--1); }
+
+  .prose { max-width: 70ch; }
+  .prose :global(h2) { font-size: var(--step-2); font-stretch: var(--wide); margin: 2.2em 0 0.6em; }
+  .prose :global(h2:first-child) { margin-top: 0; }
+  .prose :global(p) { margin-block: 0 1em; color: #c9cdd6; }
+  .prose :global(a) { color: var(--accent); text-underline-offset: 3px; }
+  .prose :global(table) { width: 100%; border-collapse: collapse; margin-block: 1.2em; font-size: var(--step--1); display: block; overflow-x: auto; }
+  .prose :global(th), .prose :global(td) { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .prose :global(th) { color: var(--muted); font-weight: 600; }
+  .prose :global(td:first-child) { font-weight: 750; color: var(--accent); }
+
+  .block { padding-block: 48px 8px; }
+  .block-title { font-size: var(--step-2); font-stretch: var(--wide); margin-bottom: 20px; }
+  .gallery { display: grid; gap: 40px; }
+  figure { margin: 0; }
+  figure :global(img) { width: auto; max-width: 100%; max-height: 85vh; border-radius: 8px; border: 1px solid var(--line); }
+  figcaption { font-size: var(--step--1); margin-top: 8px; }
+  .legal { padding-block: 40px 8px; font-size: var(--step--1); }
+  .more .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; }
+
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    .side { position: static; }
+  }
+  @media (max-width: 760px) {
+    .head-grid { grid-template-columns: 1fr; }
+    .facts div { grid-template-columns: 8rem 1fr; }
+  }
+</style>

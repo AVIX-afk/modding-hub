@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { allProjects } from "../../lib/projects";
+import { studio } from "../../site.config";
+
+const projects = await allProjects();
+const kinds = [...new Set(projects.map((p) => p.data.kind))];
+---
+<BaseLayout title="Projects" description={`Every mod, game and tool from ${studio.name}, with downloads, guides and requirements.`}>
+  <section class="wrap head">
+    <h1 class="display">Projects</h1>
+    <p class="muted">Every mod, game and tool we've released or are building. Open one for downloads, requirements and its guide.</p>
+  </section>
+
+  <section class="wrap list" aria-label="All projects">
+    {kinds.length > 1 && (
+      <div class="filters" role="group" aria-label="Filter by type">
+        <button type="button" aria-pressed="true" data-kind="all">All</button>
+        {kinds.map((k) => <button type="button" aria-pressed="false" data-kind={k}>{k}s</button>)}
+      </div>
+    )}
+    <div class="grid">
+      {projects.map((p) => <div class="item" data-kind={p.data.kind}><ProjectCard project={p} headingLevel={2} /></div>)}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".filters button");
+  buttons.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const kind = btn.dataset.kind;
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      document.querySelectorAll<HTMLElement>(".item").forEach((el) => {
+        el.hidden = kind !== "all" && el.dataset.kind !== kind;
+      });
+    }),
+  );
+</script>
+
+<style>
+  .head { padding-block: clamp(48px, 8vw, 96px) 32px; display: grid; gap: 16px; }
+  h1 { font-size: var(--step-4); }
+  .head p { font-size: var(--step-1); max-width: 52ch; }
+  .list { padding-bottom: 72px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .filters button { font: inherit; font-weight: 600; font-size: 0.92rem; min-height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--muted); cursor: pointer; }
+  .filters button[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; }
+  .item { display: grid; }
+</style>

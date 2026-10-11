@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { href } from "../lib/url";
+---
+<BaseLayout title="Page not found">
+  <section class="wrap nf">
+    <h1 class="display">This page doesn't exist.</h1>
+    <p class="muted">The link may be old, or the project may have moved. Every project is listed on the projects page.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href={href("/projects/")}>Browse projects</a>
+      <a class="btn" href={href("/")}>Go to the homepage</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf { padding-block: clamp(72px, 14vw, 160px); display: grid; gap: 20px; justify-items: start; }
+  h1 { font-size: var(--step-4); max-width: 16ch; }
+  p { font-size: var(--step-1); max-width: 48ch; }
+</style>

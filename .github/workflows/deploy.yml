@@ -1,0 +1,43 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  # Rebuild once a day so release versions and dates stay current
+  # even when only a project repo changed.
+  schedule:
+    - cron: "17 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v7
+      - name: Build with Astro
+        uses: withastro/action@v6
+        env:
+          # Lets the build read release info from GitHub without hitting
+          # the anonymous rate limit. No secret setup needed.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
