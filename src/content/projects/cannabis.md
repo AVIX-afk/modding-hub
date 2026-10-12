@@ -9,13 +9,13 @@ cover: ../../assets/projects/cannabis/cover.png
 coverAlt: The twelve strains of the mod fully grown, rendered in game on dirt blocks.
 featured: true
 order: 1
-repo: AVIX-afk/Minecraft-Cannabis
+repo: afkbirdgames/Minecraft-Cannabis
 links:
-  download: https://github.com/AVIX-afk/Minecraft-Cannabis/releases/latest
-  source: https://github.com/AVIX-afk/Minecraft-Cannabis
-  guide: https://github.com/AVIX-afk/Minecraft-Cannabis/blob/main/docs/GUIDE.md
-  changelog: https://github.com/AVIX-afk/Minecraft-Cannabis/blob/main/CHANGELOG.md
-  issues: https://github.com/AVIX-afk/Minecraft-Cannabis/issues/new/choose
+  download: https://github.com/afkbirdgames/Minecraft-Cannabis/releases/latest
+  source: https://github.com/afkbirdgames/Minecraft-Cannabis
+  guide: https://github.com/afkbirdgames/Minecraft-Cannabis/blob/main/docs/GUIDE.md
+  changelog: https://github.com/afkbirdgames/Minecraft-Cannabis/blob/main/CHANGELOG.md
+  issues: https://github.com/afkbirdgames/Minecraft-Cannabis/issues/new/choose
 requirements:
   - name: Minecraft Java Edition
     version: "26.3"

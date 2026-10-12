@@ -23,7 +23,7 @@ The site isn't tied to any one game. Each project brings its own color, platform
 
 ### Add the Discord
 
-Paste the invite URL into `discord` in `src/site.config.ts`. A Discord icon appears in the header and footer, and the homepage button switches to "Join the Discord".
+The invite URL lives in `discord` in `src/site.config.ts`. It puts a Discord icon in the header and footer and a "Join the Discord" button on the homepage, and powers `afkbird.com/discord`, a short link that forwards to the invite. Share the short link; if the invite ever changes, update this one line and every shared link keeps working. Use an invite set to never expire.
 
 ### Add a game server
 

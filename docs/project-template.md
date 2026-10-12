@@ -13,13 +13,13 @@ cover: ../../assets/projects/my-project/cover.png
 coverAlt: Describe what the cover image shows.
 featured: true                   # show it on the homepage
 order: 2                         # lower numbers come first
-repo: AVIX-afk/My-Project        # optional; shows the latest GitHub release automatically
+repo: afkbirdgames/My-Project        # optional; shows the latest GitHub release automatically
 links:
-  download: https://github.com/AVIX-afk/My-Project/releases/latest
-  source: https://github.com/AVIX-afk/My-Project
-  guide: https://github.com/AVIX-afk/My-Project#readme
-  changelog: https://github.com/AVIX-afk/My-Project/blob/main/CHANGELOG.md
-  issues: https://github.com/AVIX-afk/My-Project/issues
+  download: https://github.com/afkbirdgames/My-Project/releases/latest
+  source: https://github.com/afkbirdgames/My-Project
+  guide: https://github.com/afkbirdgames/My-Project#readme
+  changelog: https://github.com/afkbirdgames/My-Project/blob/main/CHANGELOG.md
+  issues: https://github.com/afkbirdgames/My-Project/issues
   # discord: https://discord.gg/project-invite
 requirements:
   - name: Garry's Mod

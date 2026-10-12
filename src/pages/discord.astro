@@ -1,0 +1,27 @@
+---
+// afkbird.com/discord forwards to the current Discord invite, so the
+// short link printed on banners and bios keeps working when the invite changes.
+import { studio } from "../site.config";
+import { href } from "../lib/url";
+const target = studio.links.discord;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Join the {studio.name} Discord</title>
+    {target && <meta http-equiv="refresh" content={`0; url=${target}`} />}
+    {target && <link rel="canonical" href={target} />}
+    <style>
+      body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #15171c; color: #eceef2; font-family: system-ui, sans-serif; }
+      a { color: #f0b13e; }
+    </style>
+  </head>
+  <body>
+    {target
+      ? <p>Taking you to the {studio.name} Discord. <a href={target}>Open the invite</a> if nothing happens.</p>
+      : <p>The {studio.name} Discord isn't open yet. <a href={href("/")}>Back to the homepage</a></p>}
+  </body>
+</html>
