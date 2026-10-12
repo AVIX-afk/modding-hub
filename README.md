@@ -1,6 +1,6 @@
-# Afkbird website
+# afkbird website
 
-The studio site for [Afkbird](https://afkbird.com): every project, its downloads and guides, server status and community links in one place. It's a static site built with [Astro](https://astro.build) and published to GitHub Pages automatically.
+The studio site for [afkbird](https://afkbird.com): every project, its downloads and guides, server status and community links in one place. It's a static site built with [Astro](https://astro.build) and published to GitHub Pages automatically.
 
 The site isn't tied to any one game. Each project brings its own color, platform and links, and the studio shell stays neutral.
 
@@ -33,7 +33,7 @@ Add an entry to `src/data/servers.json`:
 [
   {
     "id": "survival",
-    "name": "Afkbird Survival",
+    "name": "afkbird survival",
     "game": "Minecraft Java Edition 26.3",
     "address": "play.example.com",
     "statusSource": "minecraft",

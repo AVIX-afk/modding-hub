@@ -5,11 +5,11 @@
 // appears automatically once you paste an invite URL into `discord`.
 
 export const studio = {
-  name: "Afkbird",
-  shortName: "Afkbird",
+  name: "afkbird",
+  shortName: "afkbird",
   tagline: "Mods, games and tools from an independent developer.",
   description:
-    "Afkbird is an independent studio making mods, games and tools. Find downloads, project guides, servers and the community in one place.",
+    "afkbird is an independent studio making mods, games and tools. Find downloads, project guides, servers and the community in one place.",
   founded: 2026,
   links: {
     github: "https://github.com/afkbirdgames",
