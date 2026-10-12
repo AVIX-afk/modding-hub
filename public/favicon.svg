@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#F0B13E"/>
-  <path d="M8.5 24.5 16 7.5l7.5 17h-4.6L16 17.6l-2.9 6.9z" fill="#15171C"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="14" fill="#15171C"/><g transform="translate(8.32 7.68) scale(0.40533)"><defs><mask id="eye-fv" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+<rect width="120" height="120" fill="#fff"/>
+<g stroke="#000" stroke-width="8" stroke-linecap="round"><path d="M62 50 L76 64"/><path d="M76 50 L62 64"/></g></mask></defs>
+<g mask="url(#eye-fv)" fill="#F0B13E">
+<circle cx="58" cy="66" r="40"/>
+<path d="M90 47 L118 64 L90 81 Z"/>
+<path d="M30 40 L2 26 L44 30 Z"/>
+<path d="M40 31 L20 4 L58 27 Z"/>
+<path d="M18 70 L8 108 L58 106 Z"/>
+</g></g></svg>

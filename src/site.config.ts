@@ -5,17 +5,17 @@
 // appears automatically once you paste an invite URL into `discord`.
 
 export const studio = {
-  name: "AVIX Studios",
-  shortName: "AVIX",
+  name: "Afkbird",
+  shortName: "Afkbird",
   tagline: "Mods, games and tools from an independent developer.",
   description:
-    "AVIX Studios makes mods, games and tools. Find downloads, project guides, servers and the community in one place.",
+    "Afkbird is an independent studio making mods, games and tools. Find downloads, project guides, servers and the community in one place.",
   founded: 2026,
   links: {
     github: "https://github.com/AVIX-afk",
     discord: null as string | null, // e.g. "https://discord.gg/your-invite"
     youtube: null as string | null,
     x: null as string | null,
-    email: null as string | null, // e.g. "hello@your-domain.com"
+    email: "hello@afkbird.com" as string | null,
   },
 };

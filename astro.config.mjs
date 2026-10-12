@@ -1,11 +1,9 @@
 import { defineConfig } from "astro/config";
 
-// Where the site is served from.
-// Right now it lives at https://avix-afk.github.io/modding-hub/
-// When you connect a custom domain: set SITE to "https://your-domain.com",
-// set BASE to "/", and add the domain to public/CNAME.
-const SITE = "https://avix-afk.github.io";
-const BASE = "/modding-hub";
+// Where the site is served from. The domain is also set in
+// public/CNAME and in the repo's Settings > Pages.
+const SITE = "https://afkbird.com";
+const BASE = "/";
 
 export default defineConfig({
   site: SITE,
