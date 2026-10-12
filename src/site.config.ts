@@ -23,4 +23,11 @@ export const studio = {
   // Used to show the latest uploads on the homepage. Find it in YouTube
   // Studio > Settings > Channel > Advanced settings, or in the channel URL.
   youtubeChannelId: "UCWN856Z7Hv1IHs10CGEnBVw" as string | null,
+  // Only videos published on or after this date appear on the site, so uploads
+  // from before afkbird (old streams and the like) stay off it.
+  youtubeSince: "2026-01-01",
+  // Video IDs never to show on the site (the part after watch?v= in the link).
+  youtubeHidden: [
+    "DfqGaMa2qB4", // Jul 2025 livestream from before the rename
+  ] as string[],
 };

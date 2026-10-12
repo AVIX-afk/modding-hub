@@ -16,11 +16,19 @@ export interface Video {
 
 let videosCache: Promise<Video[]> | undefined;
 
-/** Latest uploads from the channel's public feed (no API key needed). */
-export function latestVideos(channelId: string | null, limit = 3): Promise<Video[]> {
+/** Latest uploads from the channel's public feed (no API key needed),
+ *  skipping anything older than `since` or listed in `hidden`. */
+export function latestVideos(
+  channelId: string | null,
+  limit = 3,
+  { since, hidden = [] }: { since?: string; hidden?: string[] } = {},
+): Promise<Video[]> {
   if (!channelId) return Promise.resolve([]);
   videosCache ??= fetchVideos(channelId);
-  return videosCache.then((v) => v.slice(0, limit));
+  const from = since ? new Date(since) : null;
+  return videosCache.then((v) =>
+    v.filter((x) => !hidden.includes(x.id) && (!from || x.published >= from)).slice(0, limit),
+  );
 }
 
 async function fetchVideos(channelId: string): Promise<Video[]> {

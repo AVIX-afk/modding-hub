@@ -5,7 +5,10 @@ import { studio } from "../site.config";
 import { latestVideos } from "../lib/social";
 import { formatDate } from "../lib/releases";
 
-const videos = await latestVideos(studio.youtubeChannelId, 3);
+const videos = await latestVideos(studio.youtubeChannelId, 3, {
+  since: studio.youtubeSince,
+  hidden: studio.youtubeHidden,
+});
 ---
 {videos.length > 0 && (
   <section class="section wrap" aria-labelledby="videos-title">
