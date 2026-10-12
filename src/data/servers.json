@@ -9,15 +9,30 @@
     "note": "Survival with the Cannabis mod. Whitelisted, Fabric required.",
     "join": {
       "whitelist": {
-        "how": "Post your Minecraft Java username in #whitelist-requests on our Discord, using the pinned template. Type it exactly as it appears in the launcher. You'll get the Whitelisted role once you're added.",
+        "how": "Open #whitelist-requests on our Discord, press Request a spot and enter your Minecraft Java username exactly as it appears in the launcher. Once a moderator approves it, you'll get a DM and the Whitelisted role.",
         "url": "/discord/",
         "label": "Request a spot on Discord"
       },
       "requires": [
-        { "name": "Minecraft Java Edition 26.3", "detail": "Pick 26.3 when you install Fabric." },
-        { "name": "Fabric Loader 0.19.5 or newer", "detail": "Run the installer and choose 26.3.", "url": "https://fabricmc.net/use/installer/" },
-        { "name": "Fabric API", "detail": "The 26.3 build. Drop it in your mods folder.", "url": "https://modrinth.com/mod/fabric-api" },
-        { "name": "Cannabis mod", "detail": "Same version as the server. Drop it in your mods folder.", "url": "/projects/cannabis/" }
+        {
+          "name": "Minecraft Java Edition 26.3",
+          "detail": "Pick 26.3 when you install Fabric."
+        },
+        {
+          "name": "Fabric Loader 0.19.5 or newer",
+          "detail": "Run the installer and choose 26.3.",
+          "url": "https://fabricmc.net/use/installer/"
+        },
+        {
+          "name": "Fabric API",
+          "detail": "The 26.3 build. Drop it in your mods folder.",
+          "url": "https://modrinth.com/mod/fabric-api"
+        },
+        {
+          "name": "Cannabis mod",
+          "detail": "Same version as the server. Drop it in your mods folder.",
+          "url": "/projects/cannabis/"
+        }
       ],
       "rules": [
         "Be kind to other players.",
