@@ -15,7 +15,7 @@ export const studio = {
     github: "https://github.com/afkbirdgames",
     // Use an invite set to never expire. The site also serves afkbird.com/discord,
     // which forwards here, so share that address instead of the raw invite.
-    discord: "https://discord.gg/FXYRFeFh" as string | null,
+    discord: "https://discord.gg/7kuGGyQd78" as string | null,
     youtube: null as string | null,
     x: null as string | null,
     email: "hello@afkbird.com" as string | null,
