@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import ServerList from "../components/ServerList.astro";
 import Icon from "../components/Icon.astro";
+import Community from "../components/Community.astro";
+import LatestVideos from "../components/LatestVideos.astro";
 import { allProjects, allServers } from "../lib/projects";
 import { latestRelease, formatDate } from "../lib/releases";
 import { studio } from "../site.config";
@@ -75,11 +77,21 @@ const board = (
     <section class="section wrap" aria-labelledby="servers-title">
       <div class="section-head">
         <h2 id="servers-title">Servers</h2>
-        <p class="muted">Live status for the servers we run. Copy an address and join from your game.</p>
+        <p class="muted">Live status for the servers we run. Open a server's guide to get whitelisted and join.</p>
       </div>
       <ServerList servers={servers} />
     </section>
   )}
+
+  <LatestVideos />
+
+  <section class="section wrap" aria-labelledby="community-title">
+    <div class="section-head">
+      <h2 id="community-title">Community</h2>
+      <p class="muted">News lands on Discord first, then on X and YouTube.</p>
+    </div>
+    <Community />
+  </section>
 
   <section class="section wrap studio" aria-labelledby="about-title">
     <div>

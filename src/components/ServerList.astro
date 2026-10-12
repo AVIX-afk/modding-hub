@@ -3,8 +3,9 @@
 // Minecraft servers are checked live in the visitor's browser through the
 // free mcsrvstat.us API; other games use the status you set by hand.
 import type { Server } from "../lib/projects";
-interface Props { servers: Server[] }
-const { servers } = Astro.props;
+import { href } from "../lib/url";
+interface Props { servers: Server[]; showJoin?: boolean }
+const { servers, showJoin = true } = Astro.props;
 const label = { online: "Online", offline: "Offline", maintenance: "Maintenance" } as const;
 ---
 <ul class="servers">
@@ -26,13 +27,16 @@ const label = { online: "Online", offline: "Offline", maintenance: "Maintenance"
           <button type="button" class="copy" data-copy={s.address}>Copy address</button>
         </p>
         {s.note && <p class="muted note">{s.note}</p>}
+        {showJoin && s.join && (
+          <a class="btn btn-primary join" href={href(`/servers/${s.id}/`)}>How to join</a>
+        )}
       </li>
     );
   })}
 </ul>
 
 <script>
-  type Answer = { online: boolean; players?: { online: number; max: number } };
+  type Answer = { online: boolean; players?: { online: number; max: number }; version?: string };
   const cache = new Map<string, Promise<Answer | null>>();
   function check(address: string) {
     if (!cache.has(address)) {
@@ -67,8 +71,8 @@ const label = { online: "Online", offline: "Offline", maintenance: "Maintenance"
 </script>
 
 <style>
-  .servers { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .server { padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; gap: 6px; }
+  .servers { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+  .server { padding: 20px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; gap: 6px; align-content: start; }
   .row { display: flex; justify-content: space-between; gap: 12px; font-size: var(--step--1); }
   .status { display: inline-flex; align-items: center; gap: 8px; font-weight: 650; }
   h3 { font-size: var(--step-1); margin-top: 4px; }
@@ -77,4 +81,5 @@ const label = { online: "Online", offline: "Offline", maintenance: "Maintenance"
   .copy { font: inherit; font-size: var(--step--1); font-weight: 600; color: var(--muted); background: none; border: 0; padding: 6px 4px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
   .copy:hover { color: var(--text); }
   .note { font-size: var(--step--1); }
+  .join { justify-self: start; margin-top: 10px; }
 </style>

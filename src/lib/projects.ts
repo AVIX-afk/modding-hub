@@ -21,6 +21,22 @@ const serverSchema = z.object({
   // File name of the related project, without .md (for example "cannabis").
   project: z.string().optional(),
   note: z.string().optional(),
+  // Everything the "How to join" page needs. Leave out to skip that page.
+  join: z
+    .object({
+      // What players install before joining, in order.
+      requires: z.array(z.object({ name: z.string(), detail: z.string().optional(), url: z.string().optional() })).default([]),
+      // How to get on the whitelist. Leave out for an open server.
+      whitelist: z
+        .object({
+          how: z.string(), // one sentence, e.g. "Post your Minecraft username in #whitelist-requests."
+          url: z.string(), // where the button goes, e.g. the Discord invite
+          label: z.string(), // button text, e.g. "Request a spot on Discord"
+        })
+        .optional(),
+      rules: z.array(z.string()).default([]),
+    })
+    .optional(),
 });
 export type Server = z.infer<typeof serverSchema>;
 

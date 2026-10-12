@@ -27,27 +27,44 @@ The invite URL lives in `discord` in `src/site.config.ts`. It puts a Discord ico
 
 ### Add a game server
 
-Add an entry to `src/data/servers.json`:
+Add an entry to `src/data/servers.json`. While the list is empty, every server section, the Servers page and its menu link stay hidden.
 
 ```json
 [
   {
-    "id": "survival",
-    "name": "afkbird survival",
+    "id": "smp",
+    "name": "afkbird SMP",
     "game": "Minecraft Java Edition 26.3",
-    "address": "play.example.com",
+    "address": "play.afkbird.com",
     "statusSource": "minecraft",
     "project": "cannabis",
-    "note": "Runs the latest Cannabis release."
+    "note": "Whitelisted survival with the Cannabis mod",
+    "join": {
+      "requires": [
+        { "name": "Fabric Loader 0.19.5 or newer", "url": "https://fabricmc.net/use/installer/" },
+        { "name": "Cannabis mod", "detail": "Same version as the server", "url": "/projects/cannabis/" }
+      ],
+      "whitelist": {
+        "how": "Post your Minecraft username in #whitelist-requests on our Discord.",
+        "url": "https://discord.gg/7kuGGyQd78",
+        "label": "Request a spot on Discord"
+      },
+      "rules": ["Be kind to other players."]
+    }
   }
 ]
 ```
 
 - `statusSource: "minecraft"` checks the server live in the visitor's browser using the free [mcsrvstat.us](https://mcsrvstat.us) API and shows the player count.
-- `statusSource: "manual"` with `"manualStatus": "online"`, `"offline"` or `"maintenance"` works for any game, such as Garry's Mod or a FiveM server, until a live check is added for it.
+- `statusSource: "manual"` with `"manualStatus": "online"`, `"offline"` or `"maintenance"` works for any game, such as Garry's Mod or a FiveM server.
 - `project` (optional) also lists the server on that project's page.
+- `join` (optional) creates a step-by-step guide at `/servers/<id>/`: whitelist, what to install, and how to add the server. Leave out `whitelist` for an open server and `requires` for vanilla.
 
-The homepage gets a Servers section as soon as the list has one entry.
+### Social links, YouTube videos and the Discord card
+
+- Links for Discord, YouTube, X and GitHub live in `src/site.config.ts` and appear in the header, footer and the homepage Community section.
+- The homepage shows the three newest YouTube uploads (read from the channel's public feed using `youtubeChannelId`). The section appears by itself after the first upload.
+- The Discord card reads the server name, icon and member count from the invite at build time. To show a live "online" count, turn on **Server Settings → Widget → Enable Server Widget** in Discord.
 
 ### The domain
 

@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ServerList from "../../components/ServerList.astro";
+import { allServers } from "../../lib/projects";
+import { href } from "../../lib/url";
+import { studio } from "../../site.config";
+
+const servers = allServers();
+---
+<BaseLayout title="Servers" description={`Live status and join guides for the game servers ${studio.name} runs.`}>
+  <section class="wrap head">
+    <h1 class="display">Servers</h1>
+    <p class="muted">Live status for every server we run. Open a server's guide to get whitelisted and join.</p>
+  </section>
+  <section class="wrap list">
+    {servers.length
+      ? <ServerList servers={servers} />
+      : <p class="muted empty">No servers are running right now. <a href={href("/discord/")}>Join the Discord</a> to hear when the next one opens.</p>}
+  </section>
+</BaseLayout>
+
+<style>
+  .head { padding-block: clamp(48px, 8vw, 96px) 32px; display: grid; gap: 16px; }
+  h1 { font-size: var(--step-4); }
+  .head p { font-size: var(--step-1); max-width: 52ch; }
+  .list { padding-bottom: 72px; }
+  .empty a { color: var(--text); }
+</style>

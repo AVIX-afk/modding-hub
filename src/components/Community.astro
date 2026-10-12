@@ -1,0 +1,95 @@
+---
+// Homepage community block: a live Discord card and links to every channel
+// the studio posts on. Each piece only appears once its link is set in
+// src/site.config.ts.
+import Icon from "./Icon.astro";
+import { studio } from "../site.config";
+import { discordServer } from "../lib/social";
+import { href } from "../lib/url";
+
+const { discord, youtube, x, github } = studio.links;
+const server = await discordServer(discord);
+const fmt = (n: number) => n.toLocaleString("en-US");
+const channels = [
+  youtube && { icon: "youtube" as const, name: "YouTube", text: "Trailers, showcases and devlogs", url: youtube },
+  x && { icon: "x" as const, name: "X", text: "Release news and quick updates", url: x },
+  github && { icon: "github" as const, name: "GitHub", text: "Source code, releases and issues", url: github },
+].filter(Boolean) as { icon: "youtube" | "x" | "github"; name: string; text: string; url: string }[];
+---
+{(discord || channels.length > 0) && (
+  <div class="community">
+    {discord && (
+      <article class="discord" data-guild={server?.id}>
+        <div class="d-head">
+          {server?.icon
+            ? <img class="d-icon" src={server.icon} alt="" width="56" height="56" loading="lazy" />
+            : <span class="d-icon d-fallback" aria-hidden="true"><Icon name="discord" /></span>}
+          <div>
+            <h3>{server?.name ?? `${studio.name} Discord`}</h3>
+            <p class="d-counts muted">
+              {server?.online != null && <span class="d-online"><span class="dot" data-state="online"></span><span class="d-online-n">{fmt(server.online)}</span> online</span>}
+              {server?.members != null && <span><span class="d-members-n">{fmt(server.members)}</span> {server.members === 1 ? "member" : "members"}</span>}
+            </p>
+          </div>
+        </div>
+        <p class="d-copy">
+          The main hub for {studio.name}: release announcements, server whitelist requests, support and sneak peeks.
+        </p>
+        <a class="btn btn-primary" href={href("/discord/")}><Icon name="discord" />Join the Discord</a>
+      </article>
+    )}
+    {channels.length > 0 && (
+      <ul class="channels" aria-label="Follow afkbird">
+        {channels.map((c) => (
+          <li>
+            <a href={c.url} rel="noopener" target="_blank">
+              <span class="c-icon"><Icon name={c.icon} /></span>
+              <span class="c-text"><strong>{c.name}</strong><small class="muted">{c.text}</small></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+)}
+
+<script>
+  // Refresh the "online" number live when the server widget is enabled in
+  // Discord (Server Settings > Widget). If it isn't, the build-time numbers stay.
+  const card = document.querySelector<HTMLElement>(".discord[data-guild]");
+  const guild = card?.dataset.guild;
+  if (card && guild) {
+    fetch(`https://discord.com/api/guilds/${guild}/widget.json`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((w) => {
+        const n = w?.presence_count;
+        const el = card.querySelector(".d-online-n");
+        if (typeof n === "number" && el) el.textContent = n.toLocaleString("en-US");
+      })
+      .catch(() => {});
+  }
+</script>
+
+<style>
+  .community { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; align-items: stretch; }
+  .discord { display: grid; gap: 18px; align-content: start; padding: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); border-top: 3px solid #5865f2; }
+  .d-head { display: flex; gap: 16px; align-items: center; }
+  .d-icon { width: 56px; height: 56px; border-radius: 16px; flex: none; background: var(--bg); }
+  .d-fallback { display: grid; place-items: center; color: #8a93ff; }
+  .d-fallback :global(svg) { width: 30px; height: 30px; }
+  .discord h3 { font-size: var(--step-2); font-stretch: var(--wide); }
+  .d-counts { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 4px; font-size: var(--step--1); }
+  .d-online { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: 600; }
+  .d-copy { color: #c9cdd6; max-width: 52ch; }
+  .discord .btn { justify-self: start; }
+
+  .channels { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; align-content: start; }
+  .channels a { display: flex; align-items: center; gap: 16px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; background: var(--surface); }
+  .channels a:hover { border-color: #3b4050; background: var(--surface-2); }
+  .c-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--bg); flex: none; }
+  .c-icon :global(svg) { width: 22px; height: 22px; }
+  .c-text { display: grid; line-height: 1.35; }
+  .c-text small { font-size: var(--step--1); }
+
+  @media (max-width: 860px) { .community { grid-template-columns: 1fr; } }
+</style>
