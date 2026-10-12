@@ -55,7 +55,7 @@ Add an entry to `src/data/servers.json`. While the list is empty, every server s
 ]
 ```
 
-- `statusSource: "minecraft"` checks the server live in the visitor's browser using the free [mcsrvstat.us](https://mcsrvstat.us) API and shows the player count.
+- `statusSource: "minecraft"` checks the server live in the visitor's browser using the free [mcstatus.io](https://mcstatus.io) API (with [mcsrvstat.us](https://mcsrvstat.us) as a backup) and shows the player count.
 - `statusSource: "manual"` with `"manualStatus": "online"`, `"offline"` or `"maintenance"` works for any game, such as Garry's Mod or a FiveM server.
 - `project` (optional) also lists the server on that project's page.
 - `join` (optional) creates a step-by-step guide at `/servers/<id>/`: whitelist, what to install, and how to add the server. Leave out `whitelist` for an open server and `requires` for vanilla.

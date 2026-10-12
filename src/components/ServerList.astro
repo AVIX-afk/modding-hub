@@ -1,7 +1,7 @@
 ---
 // Lists game servers from src/data/servers.json with their status.
 // Minecraft servers are checked live in the visitor's browser through the
-// free mcsrvstat.us API; other games use the status you set by hand.
+// free mcstatus.io API (mcsrvstat.us as backup); other games use the status you set by hand.
 import type { Server } from "../lib/projects";
 import { href } from "../lib/url";
 interface Props { servers: Server[]; showJoin?: boolean }
@@ -38,12 +38,16 @@ const label = { online: "Online", offline: "Offline", maintenance: "Maintenance"
 <script>
   type Answer = { online: boolean; players?: { online: number; max: number }; version?: string };
   const cache = new Map<string, Promise<Answer | null>>();
+  const get = (url: string): Promise<Answer | null> =>
+    fetch(url).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  // mcstatus.io first (it connects over IPv4, which tunnels like playit.gg
+  // answer reliably); mcsrvstat.us as a backup if mcstatus.io is down.
   function check(address: string) {
     if (!cache.has(address)) {
+      const a = encodeURIComponent(address);
       cache.set(address,
-        fetch(`https://api.mcsrvstat.us/3/${encodeURIComponent(address)}`)
-          .then((r) => (r.ok ? r.json() : null))
-          .catch(() => null));
+        get(`https://api.mcstatus.io/v2/status/java/${a}`)
+          .then((res) => res ?? get(`https://api.mcsrvstat.us/3/${a}`)));
     }
     return cache.get(address)!;
   }
