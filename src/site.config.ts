@@ -5,11 +5,11 @@
 // appears automatically once you paste an invite URL into `discord`.
 
 export const studio = {
-  name: "AVIX Studio",
+  name: "AVIX Studios",
   shortName: "AVIX",
   tagline: "Mods, games and tools from an independent developer.",
   description:
-    "AVIX Studio makes mods, games and tools. Find downloads, project guides, servers and the community in one place.",
+    "AVIX Studios makes mods, games and tools. Find downloads, project guides, servers and the community in one place.",
   founded: 2026,
   links: {
     github: "https://github.com/AVIX-afk",

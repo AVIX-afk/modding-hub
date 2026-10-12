@@ -1,6 +1,6 @@
-# AVIX Studio website
+# AVIX Studios website
 
-The studio site for AVIX Studio: every project, its downloads and guides, server status and community links in one place. It's a static site built with [Astro](https://astro.build) and published to GitHub Pages automatically.
+The studio site for AVIX Studios: every project, its downloads and guides, server status and community links in one place. It's a static site built with [Astro](https://astro.build) and published to GitHub Pages automatically.
 
 The site isn't tied to any one game. Each project brings its own color, platform and links, and the studio shell stays neutral.
 
