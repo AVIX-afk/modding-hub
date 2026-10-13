@@ -1,6 +1,6 @@
 ---
 title: Tidy Nest
-summary: One click sorts your inventory, chests, barrels and shulker boxes. Gear first, best and least worn first, then blocks, food and materials.
+summary: One click sorts your inventory, chests, barrels and shulker boxes. Gear first, then like items kept together: wood types, glass, dyes, stone.
 platform: Minecraft Java Edition (Fabric)
 kind: Mod
 status: Released
@@ -38,9 +38,10 @@ legal: Not an official Minecraft product. Not approved by or associated with Moj
 
 Open a chest or your inventory and you'll see a small button with three bars above each grid. Click it and that grid is sorted. No menus, nothing to set up.
 
-* **Stacks are merged**, and the item you have most of comes first, biggest stacks first.
+* **Stacks are merged**, biggest stacks first.
 * **Gear comes first**, best first: weapons and tools by type with the best material and least worn first, then armour head to feet, then shields and other gear.
 * **Then blocks, food and potions, materials, other items**, and shulker boxes and bundles last.
+* **Like items stay together:** each wood type from sapling to planks to door, all glass in every colour, all dyes, a stone with its stairs and slabs, an ore with its ingots. The same things always end up in the same place.
 * **Your hotbar, armour and off hand never move.**
 * **Shortcuts:** double-click an empty slot or middle-click any slot to sort its grid.
 * **Works on any server.** With Tidy Nest on the server the server sorts in one step; without it, your game does the same with ordinary clicks and stops safely if anything doesn't match.
