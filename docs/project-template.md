@@ -11,6 +11,7 @@ status: In development           # Released, In development, Paused or Archived
 accent: "#4FA3F0"                # the project's own color (6-digit hex)
 cover: ../../assets/projects/my-project/cover.png
 coverAlt: Describe what the cover image shows.
+pixelArt: true                   # false for app screenshots and photos (smooth scaling)
 featured: true                   # show it on the homepage
 order: 2                         # lower numbers come first
 repo: afkbirdgames/My-Project        # optional; shows the latest GitHub release automatically

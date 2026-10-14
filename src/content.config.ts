@@ -19,6 +19,9 @@ const projects = defineCollection({
       accent: z.string().regex(/^#[0-9a-fA-F]{6}$/),
       cover: image(),
       coverAlt: z.string(),
+      // Keep pixel art crisp when it's scaled (Minecraft renders and the like).
+      // Set to false for app screenshots and photos so they scale smoothly.
+      pixelArt: z.boolean().default(true),
       featured: z.boolean().default(false),
       order: z.number().default(100),
       // owner/name of the GitHub repo. Used to read the latest release.

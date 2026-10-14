@@ -21,11 +21,15 @@ const release = await latestRelease(data.repo);
 const servers = allServers().filter((s) => s.project === project.id);
 const others = (await allProjects()).filter((p) => p.id !== project.id).slice(0, 3);
 
+// Things people play (mods, games, servers) get game wording; tools and bots don't.
+const playable = ["Mod", "Game", "Plugin", "Server"].includes(data.kind);
 const resources = [
-  data.links.guide && { icon: "book" as const, label: "Player guide", text: "Recipes, rules and numbers", url: data.links.guide },
+  data.links.guide && (playable
+    ? { icon: "book" as const, label: "Player guide", text: "Recipes, rules and numbers", url: data.links.guide }
+    : { icon: "book" as const, label: "Guide", text: "How it works and how to use it", url: data.links.guide }),
   data.links.changelog && { icon: "list" as const, label: "Changelog", text: "What changed in each version", url: data.links.changelog },
   data.links.issues && { icon: "bug" as const, label: "Report a problem", text: "Bugs and ideas go to the issue tracker", url: data.links.issues },
-  data.links.discord && { icon: "discord" as const, label: "Project Discord", text: "Chat with other players", url: data.links.discord },
+  data.links.discord && { icon: "discord" as const, label: "Project Discord", text: playable ? "Chat with other players" : "Chat with other users", url: data.links.discord },
 ].filter(Boolean) as { icon: "book" | "list" | "bug" | "discord"; label: string; text: string; url: string }[];
 ---
 <BaseLayout title={data.title} description={data.summary} image={data.cover} accent={data.accent}>
@@ -59,7 +63,7 @@ const resources = [
     </header>
 
     <div class="wrap">
-      <Image class="cover" src={data.cover} alt={data.coverAlt} widths={[720, 1200, 1760]} sizes="(max-width: 1240px) 100vw, 1180px" loading="eager" />
+      <Image class:list={["cover", { pixel: data.pixelArt }]} src={data.cover} alt={data.coverAlt} widths={[720, 1200, 1760]} sizes="(max-width: 1240px) 100vw, 1180px" loading="eager" />
       {data.contentNote && <p class="note">{data.contentNote}</p>}
     </div>
 
@@ -98,7 +102,7 @@ const resources = [
 
     {data.gallery.length > 0 && (
       <section class="wrap block" aria-labelledby="gal">
-        <h2 id="gal" class="block-title">In game</h2>
+        <h2 id="gal" class="block-title">{playable ? "In game" : "Screenshots"}</h2>
         <div class="gallery">
           {data.gallery.map((g) => (
             <figure>
@@ -135,7 +139,8 @@ const resources = [
   .facts dd { margin: 0; font-weight: 600; }
   .facts dd .muted { font-weight: 450; }
 
-  :global(img.cover) { width: 100%; border-radius: var(--radius); image-rendering: pixelated; border-bottom: 4px solid var(--accent); }
+  :global(img.cover) { width: 100%; border-radius: var(--radius); border-bottom: 4px solid var(--accent); }
+  :global(img.cover.pixel) { image-rendering: pixelated; }
   .note { margin-top: 16px; padding: 14px 18px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; color: var(--muted); font-size: var(--step--1); max-width: 80ch; }
 
   .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px clamp(32px, 6vw, 72px); padding-block: 56px 24px; align-items: start; }
