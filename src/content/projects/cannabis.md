@@ -2,6 +2,7 @@
 title: Cannabis
 summary: A vanilla-style farming mod. Grow twelve strains in three tiers, cross-breed new ones, and roll, smoke, dab or cook what you harvest.
 platform: Minecraft Java Edition (Fabric)
+platformGroup: Minecraft
 kind: Mod
 status: Released
 accent: "#7CC96A"

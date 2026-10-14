@@ -2,12 +2,14 @@
 title: Nestsweep
 summary: Free, open-source PC care for Windows. Clear junk files, uninstall programs and their leftovers, put idle apps to sleep, and keep apps and drivers up to date.
 platform: Windows 10 / 11
+platformGroup: Windows
 kind: Tool
 status: Released
 accent: "#F0B13E"
 cover: ../../assets/projects/nestsweep/cover.png
 coverAlt: The Nestsweep overview screen showing free disk space, junk files that can be cleared, startup apps and available app updates.
 pixelArt: false
+thumb: ../../assets/projects/nestsweep/thumb.png
 featured: true
 order: 3
 repo: afkbirdgames/nestsweep

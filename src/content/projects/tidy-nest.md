@@ -2,6 +2,7 @@
 title: Tidy Nest
 summary: "One click sorts your inventory, chests, barrels and shulker boxes. Gear first, then like items kept together: wood types, glass, dyes, stone."
 platform: Minecraft Java Edition (Fabric)
+platformGroup: Minecraft
 kind: Mod
 status: Released
 accent: "#FCDB4A"

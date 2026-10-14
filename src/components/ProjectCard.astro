@@ -13,7 +13,7 @@ const state = data.status === "Released" ? "released" : data.status === "In deve
 ---
 <article class:list={["card", { wide, pixel: data.pixelArt }]} style={`--accent: ${data.accent}`}>
   <a class="cover" href={href(`/projects/${project.id}/`)} tabindex="-1" aria-hidden="true">
-    <Image src={data.cover} alt="" widths={[480, 760, 1200]} sizes={wide ? "(max-width: 860px) 100vw, 700px" : "(max-width: 700px) 100vw, 380px"} />
+    <Image src={data.thumb ?? data.cover} alt="" widths={[480, 760, 1200]} sizes={wide ? "(max-width: 860px) 100vw, 700px" : "(max-width: 700px) 100vw, 380px"} />
   </a>
   <div class="body">
     <div class="tags">

@@ -7,6 +7,9 @@ The site isn't tied to any one game. Each project brings its own color, platform
 ## How it works
 
 - **Projects** are Markdown files in `src/content/projects/`. Each file becomes a page and a card.
+- **The homepage groups projects by type** (`kind`): one row each for Mods, Tools, Games and so on, up to three cards per row. A row appears as soon as one project of that type exists, and rows follow the projects' `order`.
+- **The Projects page filters by Type and Platform** (`kind` and `platformGroup`). Filters live in the address, so links like `/projects/?type=tool&platform=windows` can be shared.
+- **"What's new"** on each project page shows the latest GitHub release notes. A release with empty notes simply hides the box. `[optional]` in the notes is never shown.
 - **Release versions and dates** are read from each project's GitHub release when the site builds. The site rebuilds on every push to `main` and once a day, so new releases show up without touching this repo.
 - **Downloads** always link to the project's own GitHub Releases. The site never hosts copies.
 - **Servers** are listed in `src/data/servers.json`. While the list is empty, server sections stay hidden.
@@ -18,7 +21,7 @@ The site isn't tied to any one game. Each project brings its own color, platform
 
 1. Copy `docs/project-template.md` to `src/content/projects/<name>.md`. The file name becomes the address, for example `/projects/<name>/`.
 2. Put its images in `src/assets/projects/<name>/` and point `cover` and `gallery` at them. Use real screenshots.
-3. Fill in the fields and write the description under the `---` line.
+3. Fill in the fields and write the description under the `---` line. Set `platformGroup` (Minecraft, Windows, Garry's Mod, GTA V or Other) for the filters. Set `pixelArt: false` for app screenshots or photos, and add an optional `thumb` when the cover is too busy at card size.
 4. Push to `main`. The site deploys in a minute or two.
 
 ### Add the Discord

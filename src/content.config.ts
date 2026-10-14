@@ -12,6 +12,9 @@ const projects = defineCollection({
       summary: z.string().max(200),
       // What it's built for, written the way players say it.
       platform: z.string(),
+      // The platform family used by the Platform filter and homepage rows.
+      // Add a new value here when a project targets something new.
+      platformGroup: z.enum(["Minecraft", "Windows", "Garry's Mod", "GTA V", "Other"]),
       kind: z.enum(["Mod", "Game", "Tool", "Script", "Plugin", "Server", "Bot"]),
       status: z.enum(["Released", "In development", "Paused", "Archived"]),
       // The project's own color. Used for its page, buttons and card details,
@@ -22,6 +25,8 @@ const projects = defineCollection({
       // Keep pixel art crisp when it's scaled (Minecraft renders and the like).
       // Set to false for app screenshots and photos so they scale smoothly.
       pixelArt: z.boolean().default(true),
+      // Optional smaller, simpler image for project cards. Falls back to the cover.
+      thumb: image().optional(),
       featured: z.boolean().default(false),
       order: z.number().default(100),
       // owner/name of the GitHub repo. Used to read the latest release.

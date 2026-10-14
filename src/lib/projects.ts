@@ -45,3 +45,32 @@ const servers = z.array(serverSchema).parse(serverList);
 export function allServers(): Server[] {
   return servers;
 }
+
+// ---------- Project types ----------
+// How each `kind` is named when it heads a list ("Mods", "Tools", ...),
+// and the slug used in shareable filter links (/projects/?type=tool).
+const kindPlural: Record<string, string> = {
+  Mod: "Mods", Game: "Games", Tool: "Tools", Script: "Scripts", Plugin: "Plugins", Server: "Servers", Bot: "Bots",
+};
+export const pluralKind = (kind: string) => kindPlural[kind] ?? `${kind}s`;
+export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+type Project = Awaited<ReturnType<typeof allProjects>>[number];
+
+// Groups projects by kind for the homepage. Groups appear in the order of their
+// first project, so a project's `order` also decides which row comes first.
+export function groupByKind(projects: Project[]) {
+  const groups = new Map<string, Project[]>();
+  for (const p of projects) {
+    if (!groups.has(p.data.kind)) groups.set(p.data.kind, []);
+    groups.get(p.data.kind)!.push(p);
+  }
+  return [...groups].map(([kind, items]) => ({
+    kind,
+    label: pluralKind(kind),
+    slug: slugify(kind),
+    // Featured projects first, then by order.
+    items: [...items].sort((a, b) => Number(b.data.featured) - Number(a.data.featured)),
+    platforms: [...new Set(items.map((p) => p.data.platformGroup))].filter((g) => g !== "Other"),
+  }));
+}

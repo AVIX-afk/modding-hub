@@ -68,7 +68,18 @@ const resources = [
     </div>
 
     <div class="wrap layout">
-      <div class="prose"><Content /></div>
+      <div class="main-col">
+        <div class="prose"><Content /></div>
+        {release?.notesHtml && (
+          <section class="news" aria-labelledby="news">
+            <div class="news-head">
+              <h2 id="news">What's new in {release.version}</h2>
+              <a href={data.links.changelog ?? release.url} rel="noopener" target="_blank">All changes<Icon name="external" /></a>
+            </div>
+            <div class="notes" set:html={release.notesHtml} />
+          </section>
+        )}
+      </div>
       <aside class="side">
         {data.requirements.length > 0 && (
           <section aria-labelledby="req">
@@ -160,6 +171,21 @@ const resources = [
   .resources small { font-size: var(--step--1); }
 
   .prose { max-width: 70ch; }
+  .main-col { display: grid; gap: 56px; min-width: 0; }
+  .news { max-width: 70ch; border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: var(--radius); background: var(--surface); padding: 22px 24px 8px; }
+  .news-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 20px; margin-bottom: 12px; }
+  .news-head h2 { font-size: var(--step-1); font-stretch: var(--wide); }
+  .news-head a { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 600; font-size: var(--step--1); text-underline-offset: 3px; }
+  .news-head a:hover { color: var(--text); }
+  .news-head :global(svg) { width: 14px; height: 14px; }
+  .notes { font-size: 0.95rem; color: #c9cdd6; }
+  .notes :global(p), .notes :global(ul), .notes :global(ol) { margin: 0 0 1em; }
+  .notes :global(ul), .notes :global(ol) { padding-left: 1.2em; }
+  .notes :global(li) { margin-bottom: 0.35em; }
+  .notes :global(li > ul) { margin: 0.35em 0 0; }
+  .notes :global(strong) { color: var(--text); }
+  .notes :global(code) { font-size: 0.9em; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+  .notes :global(a) { color: var(--accent); }
   .prose :global(h2) { font-size: var(--step-2); font-stretch: var(--wide); margin: 2.2em 0 0.6em; }
   .prose :global(h2:first-child) { margin-top: 0; }
   .prose :global(p) { margin-block: 0 1em; color: #c9cdd6; }

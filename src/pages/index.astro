@@ -5,15 +5,16 @@ import ServerList from "../components/ServerList.astro";
 import Icon from "../components/Icon.astro";
 import Community from "../components/Community.astro";
 import LatestVideos from "../components/LatestVideos.astro";
-import { allProjects, allServers } from "../lib/projects";
+import { allProjects, allServers, groupByKind } from "../lib/projects";
 import { latestRelease, formatDate } from "../lib/releases";
 import { studio } from "../site.config";
 import { href } from "../lib/url";
 
 const projects = await allProjects();
 const servers = allServers();
-const featured = projects.filter((p) => p.data.featured);
-const shown = featured.length ? featured : projects;
+// One row per project type (Mods, Tools, ...), up to three projects each.
+const rows = groupByKind(projects);
+const perRow = 3;
 
 // The release board: every project with a GitHub release, newest first.
 const board = (
@@ -28,7 +29,7 @@ const board = (
     <div class="intro">
       <h1 class="display">Mods, games and tools, built in the open.</h1>
       <p class="lead muted">
-        {studio.name} is an independent studio making things for the games people already play, and a few of its own.
+        {studio.name} is an independent studio making mods, tools and games.
         Every download here goes straight to its official GitHub release.
       </p>
       <div class="btn-row">
@@ -63,15 +64,20 @@ const board = (
     </aside>
   </section>
 
-  <section class="section wrap" aria-labelledby="projects-title">
-    <div class="section-head">
-      <h2 id="projects-title">Projects</h2>
-      <a class="all" href={href("/projects/")}>All projects</a>
-    </div>
-    <div class:list={["grid", { stack: shown.length <= 2 }]}>
-      {shown.map((p) => <ProjectCard project={p} wide={shown.length <= 2} />)}
-    </div>
-  </section>
+  {rows.map((row) => (
+    <section class="section wrap" aria-labelledby={`row-${row.slug}`}>
+      <div class="section-head">
+        <div>
+          <h2 id={`row-${row.slug}`}>{row.label}</h2>
+          {row.platforms.length > 0 && <p class="muted row-sub">For {row.platforms.join(", ")}</p>}
+        </div>
+        <a class="all" href={href(`/projects/?type=${row.slug}`)}>All {row.label.toLowerCase()} ({row.items.length})</a>
+      </div>
+      {row.items.length === 1
+        ? <ProjectCard project={row.items[0]} wide />
+        : <div class="grid">{row.items.slice(0, perRow).map((p) => <ProjectCard project={p} />)}</div>}
+    </section>
+  ))}
 
   {servers.length > 0 && (
     <section class="section wrap" aria-labelledby="servers-title">
@@ -129,8 +135,8 @@ const board = (
 
   .all { color: var(--muted); font-weight: 600; text-underline-offset: 4px; }
   .all:hover { color: var(--text); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; }
-  .grid.stack { grid-template-columns: 1fr; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; }
+  .row-sub { margin-top: 6px; font-size: var(--step--1); }
 
   .studio { display: grid; grid-template-columns: 1fr 1fr; gap: 32px clamp(32px, 6vw, 80px); align-items: start; border-top: 1px solid var(--line); }
   .studio h2 { font-size: var(--step-3); line-height: 1.08; }

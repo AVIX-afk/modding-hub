@@ -29,12 +29,13 @@ const nav = [
 ];
 const isCurrent = (to: string) => path === to || path.startsWith(to) ? "page" : undefined;
 const year = new Date().getFullYear();
+// Discord is the community hub, so it gets its own labelled button in the
+// header; the other channels stay as icons.
 const social = [
-  studio.links.discord && { name: "discord" as const, label: "Discord", url: studio.links.discord },
   studio.links.youtube && { name: "youtube" as const, label: "YouTube", url: studio.links.youtube },
   studio.links.x && { name: "x" as const, label: "X", url: studio.links.x },
   { name: "github" as const, label: "GitHub", url: studio.links.github },
-].filter(Boolean) as { name: "discord" | "youtube" | "x" | "github"; label: string; url: string }[];
+].filter(Boolean) as { name: "youtube" | "x" | "github"; label: string; url: string }[];
 ---
 <!doctype html>
 <html lang="en">
@@ -72,6 +73,9 @@ const social = [
               <li><a href={s.url} rel="noopener" target="_blank" title={s.label}><Icon name={s.name} label={s.label} /></a></li>
             ))}
           </ul>
+          {studio.links.discord && (
+            <a class="discord" href={studio.links.discord} rel="noopener" target="_blank"><Icon name="discord" /><span>Discord</span></a>
+          )}
         </nav>
       </div>
     </header>
@@ -90,6 +94,7 @@ const social = [
           <li><a href={href("/projects/")}>Projects</a></li>
           {allServers().length > 0 && <li><a href={href("/servers/")}>Servers</a></li>}
           <li><a href={href("/about/")}>About</a></li>
+          {studio.links.discord && <li><a href={studio.links.discord} rel="noopener" target="_blank">Discord</a></li>}
           {social.map((s) => <li><a href={s.url} rel="noopener" target="_blank">{s.label}</a></li>)}
         </ul>
         <p class="muted copy">© {studio.founded === year ? year : `${studio.founded}–${year}`} {studio.name}. Game names and trademarks belong to their owners.</p>
@@ -117,6 +122,9 @@ const social = [
   .social { padding-left: 8px !important; margin-left: 4px !important; border-left: 1px solid var(--line) !important; }
   .social a { padding: 0 10px; }
   .social :global(svg) { width: 20px; height: 20px; }
+  nav a.discord { gap: 8px; margin-left: 6px; padding: 0 14px; min-height: 38px; border: 1px solid var(--line); background: var(--surface); color: var(--text); }
+  nav a.discord:hover { border-color: color-mix(in oklab, #5865f2 60%, var(--line)); background: var(--surface-2); }
+  nav a.discord :global(svg) { width: 18px; height: 18px; color: #8a94ff; }
 
   .site-footer { border-top: 1px solid var(--line); margin-top: 32px; }
   .foot { display: grid; grid-template-columns: 1fr auto; gap: 20px 40px; padding-block: 40px 32px; }
@@ -131,6 +139,8 @@ const social = [
   }
   @media (max-width: 560px) {
     nav a { padding: 0 9px; }
+    nav a.discord { padding: 0 10px; margin-left: 2px; }
+    nav a.discord span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     .foot { grid-template-columns: 1fr; }
   }
   @media (max-width: 400px) {
